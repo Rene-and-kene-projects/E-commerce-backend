@@ -24,11 +24,11 @@ class UserController {
     const newUser = await userService.create(data);
 
     const verificationToken = newUser.generateToken();
-    const url = `${process.env.APP_URL}users/verify/${verificationToken}`;
+    const url = `${process.env.APP_URL}/users/verify/${verificationToken}`;
 
     const response = {
       body: {
-        name: `${req.body.username}`,
+        name: `${data.username}`,
         intro: 'Email Verification Link',
         action: {
           instructions:
@@ -54,7 +54,7 @@ class UserController {
     await transporter.sendMail(message);
 
     return res.status(201).send({
-      message: `Sent a verification email to ${req.body.email}`
+      message: `Sent a verification email to ${data.email}`
     });
   }
 
