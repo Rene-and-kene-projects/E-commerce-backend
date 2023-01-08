@@ -17,7 +17,7 @@ class UserController {
       });
     }
     const data = {
-      email: req.body.email,
+      email: req.body.email.toLowercase(),
       password: bcrypt.hashSync(req.body.password, 10),
       username: req.body.username
     };
