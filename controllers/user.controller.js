@@ -45,7 +45,7 @@ class UserController {
     const mail = mailGenerator.generate(response);
 
     const message = {
-      from: 'Across the Globe <enere0115@gmail.com>',
+      from: 'E-Commerce <enere0115@gmail.com>',
       to: req.body.email,
       subject: 'Verify Your Email',
       html: mail
