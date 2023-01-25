@@ -10,7 +10,7 @@ import userService from '../services/user.service.js';
 class UserController {
   async createUser(req, res) {
     const data = {
-      email: req.body.email.toLowercase(),
+      email: req.body.email.toLowerCase(),
       password: bcrypt.hashSync(req.body.password, 10),
       username: req.body.username
     };
