@@ -9,6 +9,18 @@ import userService from '../services/user.service.js';
 
 class UserController {
   async createUser(req, res) {
+    const data = {
+      email: req.body.email.toLowercase(),
+      password: bcrypt.hashSync(req.body.password, 10),
+      username: req.body.username
+    };
+    const username = await userService.findByUsername(req.body);
+    if (username) {
+      return res.status(200).send({
+        success: true,
+        message: 'Username already exists.'
+      });
+    }
     const user = await userService.findByEmail(req.body);
     if (!_.isEmpty(user)) {
       return res.status(400).send({
@@ -16,11 +28,7 @@ class UserController {
         message: 'User already exists'
       });
     }
-    const data = {
-      email: req.body.email.toLowercase(),
-      password: bcrypt.hashSync(req.body.password, 10),
-      username: req.body.username
-    };
+
     const newUser = await userService.create(data);
 
     const verificationToken = newUser.generateToken();
