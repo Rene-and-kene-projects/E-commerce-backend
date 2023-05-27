@@ -7,6 +7,7 @@ const userRouter = express.Router();
 
 userRouter.post('/signup', [validator(validateUserSignupSchema)], userController.createUser);
 userRouter.post('/login', [validator(validateUserLoginSchema)], userController.loginUser);
+userRouter.get('/', userController.getUsers);
 userRouter.get('/verify/:token', userController.verify);
 userRouter.post('/forgotpassword', userController.forgotPassword);
 export default userRouter;

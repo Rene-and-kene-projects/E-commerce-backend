@@ -6,21 +6,24 @@ const user = new mongoose.Schema(
     email: {
       type: "String",
       required: true,
-      unique: true,
+      unique: true
     },
     password: {
       type: "String",
-      required: true,
+      required: true
     },
-    username: {
+    lastname: {
       type: "String",
-      required: true,
-      unique: true,
+      required: true
+    },
+    firstname: {
+      type: "String",
+      required: true
     },
     verified: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   { timestamps: true }
 );
@@ -39,6 +42,9 @@ user.methods.generateToken = function t() {
     {
       _id: this._id,
       email: this.email,
+      firstname: this.firstname,
+      lastname: this.lastname
+
     },
     process.env.TOKEN_SECRET,
     { expiresIn: "20 mins" }

@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { transporter, mailGenerator } from "../config/mailer.config.js";
 import userService from "../services/user.service.js";
 
+
 class UserController {
   async createUser(req, res) {
     const data = {
@@ -117,6 +118,22 @@ class UserController {
     return res.status(200).send({
       message: "Account Verified",
     });
+  }
+
+  async getUsers(req, res) {
+    try {
+      const user = await userService.find();
+      return res.status(200).send({
+        success: true,
+        data: user
+      })
+    } catch (err) {
+      console.log(err);
+      return res.status(400).send({
+        success: false,
+        error: err.message,
+      });
+    }
   }
 
   async forgotPassword(req, res) {

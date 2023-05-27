@@ -20,5 +20,10 @@ class UserService {
     const user = await userModel.findOne(filter);
     return user;
   }
+
+  async find() {
+    const user = await userModel.find();
+    return user;
+  }
 }
 export default new UserService();
