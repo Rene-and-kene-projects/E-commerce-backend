@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import pino from 'pino';
+import pino from "pino";
 
 const logger = pino();
 

@@ -1,29 +1,29 @@
-/* eslint-disable no-underscore-dangle */
-import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 
-const user = new mongoose.Schema({
-
-  email: {
-    type: 'String',
-    required: true,
-    unique: true
+const user = new mongoose.Schema(
+  {
+    email: {
+      type: "String",
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: "String",
+      required: true,
+    },
+    username: {
+      type: "String",
+      required: true,
+      unique: true,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
   },
-  password: {
-    type: 'String',
-    required: true
-
-  },
-  username: {
-    type: 'String',
-    required: true,
-    unique: true
-  },
-  verified: {
-    type: Boolean,
-    default: false
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 user.methods.toJSON = function l() {
   const userObject = this.toObject();
@@ -33,15 +33,20 @@ user.methods.toJSON = function l() {
 };
 
 // Define static method to be used on User object
-user.methods.generateToken = function t() { // t is short for token
-  const token = jwt.sign({
-    _id: this._id,
-    email: this.email
-  }, process.env.TOKEN_SECRET, { expiresIn: '20 mins' });
+user.methods.generateToken = function t() {
+  // t is short for token
+  const token = jwt.sign(
+    {
+      _id: this._id,
+      email: this.email,
+    },
+    process.env.TOKEN_SECRET,
+    { expiresIn: "20 mins" }
+  );
 
   return token;
 };
 
-export const UserModel = mongoose.model('User', user);
+export const UserModel = mongoose.model("User", user);
 
 export default UserModel;
