@@ -44,7 +44,6 @@ user.methods.generateToken = function t() {
       email: this.email,
       firstname: this.firstname,
       lastname: this.lastname
-
     },
     process.env.TOKEN_SECRET,
     { expiresIn: "20 mins" }

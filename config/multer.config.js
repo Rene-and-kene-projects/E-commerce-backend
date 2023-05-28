@@ -10,6 +10,6 @@ const store = multer({
       return;
     }
     cb(null, true);
-  },
+  }
 });
 export default store;

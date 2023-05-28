@@ -5,7 +5,7 @@ import logger from "../app.js";
 dotenv.config();
 
 const database = () => {
-  mongoose.set('strictQuery', true);
+  mongoose.set("strictQuery", true);
   mongoose
     .connect(process.env.DATABASE_URI)
     .then((value) => logger.info("database connected"))

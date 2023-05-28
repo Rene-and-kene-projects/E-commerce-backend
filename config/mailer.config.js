@@ -9,16 +9,16 @@ export const transporter = nodemailer.createTransport({
   secure: true,
   auth: {
     user: process.env.AUTH_EMAIL,
-    pass: process.env.AUTH_PASS,
-  },
+    pass: process.env.AUTH_PASS
+  }
 });
 
 export const mailGenerator = new Mailgen({
   theme: "default",
   product: {
     name: "Across the Globe",
-    link: "https://www.atg.world/",
-  },
+    link: "https://www.atg.world/"
+  }
 });
 
 export default { transporter, mailGenerator };

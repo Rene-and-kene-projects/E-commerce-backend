@@ -4,6 +4,6 @@ import store from "../config/multer.config.js";
 
 const productRouter = express.Router();
 
-productRouter.post('/create', store.single('image'), productController.create);
+productRouter.post("/create", store.single("image"), productController.create);
 
 export default productRouter;

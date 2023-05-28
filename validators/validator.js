@@ -12,7 +12,7 @@ const validator =
     } catch (e) {
       return res.status(500).send({
         success: false,
-        body: e,
+        body: e
       });
     }
   };

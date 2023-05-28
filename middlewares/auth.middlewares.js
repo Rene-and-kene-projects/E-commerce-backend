@@ -11,7 +11,7 @@ const authentication = (req, res, next) => {
       logger.error(err);
       return res.status(403).send({
         success: false,
-        message: "authentication error",
+        message: "authentication error"
       });
     }
     req.user = user;

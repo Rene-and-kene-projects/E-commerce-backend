@@ -10,12 +10,12 @@ export const validateUserSignupSchema = Joi.object().keys({
     .lowercase()
     .required(),
   username: Joi.string().required().max(15),
-  password: Joi.string().required(),
+  password: Joi.string().required()
 });
 
 export const validateUserLoginSchema = Joi.object().keys({
   username: Joi.string().required().max(15),
-  password: Joi.string().required(),
+  password: Joi.string().required()
 });
 
 export const validateUserEmailSchema = Joi.object().keys({
@@ -26,11 +26,11 @@ export const validateUserEmailSchema = Joi.object().keys({
     )
     .trim()
     .lowercase()
-    .required(),
+    .required()
 });
 
 export default {
   validateUserSignupSchema,
   validateUserLoginSchema,
-  validateUserEmailSchema,
+  validateUserEmailSchema
 };
