@@ -9,15 +9,9 @@ class UserController {
     const data = {
       email: req.body.email.toLowerCase(),
       password: bcrypt.hashSync(req.body.password, 10),
-      username: req.body.username
+      lastname: req.body.lastname,
+      firstname: req.body.firstname
     };
-    const username = await userService.findByUsername(req.body);
-    if (username) {
-      return res.status(200).send({
-        success: true,
-        message: "Username already exists."
-      });
-    }
     const user = await userService.findByEmail(req.body);
     if (!_.isEmpty(user)) {
       return res.status(400).send({
@@ -33,7 +27,7 @@ class UserController {
 
     const response = {
       body: {
-        name: `${data.username}`,
+        name: `${data.lastname}`,
         intro: "Email Verification Link",
         action: {
           instructions:
