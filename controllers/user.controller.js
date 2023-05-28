@@ -4,26 +4,25 @@ import bcrypt from "bcrypt";
 import { transporter, mailGenerator } from "../config/mailer.config.js";
 import userService from "../services/user.service.js";
 
-
 class UserController {
   async createUser(req, res) {
     const data = {
       email: req.body.email.toLowerCase(),
       password: bcrypt.hashSync(req.body.password, 10),
-      username: req.body.username,
+      username: req.body.username
     };
     const username = await userService.findByUsername(req.body);
     if (username) {
       return res.status(200).send({
         success: true,
-        message: "Username already exists.",
+        message: "Username already exists."
       });
     }
     const user = await userService.findByEmail(req.body);
     if (!_.isEmpty(user)) {
       return res.status(400).send({
         success: false,
-        message: "User already exists",
+        message: "User already exists"
       });
     }
 
@@ -41,11 +40,11 @@ class UserController {
             "If you did not request for this mail, Please Ignore it. To Verify your Email password, click on the link below:",
           button: {
             text: "Verify Email",
-            link: url,
-          },
+            link: url
+          }
         },
-        outro: "Do not share this link with anyone.",
-      },
+        outro: "Do not share this link with anyone."
+      }
     };
 
     const mail = mailGenerator.generate(response);
@@ -54,13 +53,13 @@ class UserController {
       from: "E-Commerce <enere0115@gmail.com>",
       to: req.body.email,
       subject: "Verify Your Email",
-      html: mail,
+      html: mail
     };
 
     await transporter.sendMail(message);
 
     return res.status(201).send({
-      message: `Sent a verification email to ${data.email}`,
+      message: `Sent a verification email to ${data.email}`
     });
   }
 
@@ -69,15 +68,14 @@ class UserController {
     if (_.isEmpty(user)) {
       return res.status(404).send({
         success: false,
-        message:
-          "user does not exist, create a user before attempting to login",
+        message: "user does not exist, create a user before attempting to login"
       });
     }
     const verifyPassword = bcrypt.compareSync(req.body.password, user.password);
     if (!verifyPassword) {
       return res.status(404).send({
         success: false,
-        message: "email or password is invalid",
+        message: "email or password is invalid"
       });
     }
     const token = jwt.sign(
@@ -90,8 +88,8 @@ class UserController {
       body: {
         message: "user logged in successfully",
         token,
-        data: user,
-      },
+        data: user
+      }
     });
   }
 
@@ -100,7 +98,7 @@ class UserController {
     // Check we have an id
     if (!token) {
       return res.status(422).send({
-        message: "Missing Token",
+        message: "Missing Token"
       });
     }
 
@@ -108,7 +106,7 @@ class UserController {
     const user = await userService.findOne({ _id: decoded._id });
     if (!user) {
       return res.status(404).send({
-        message: "User does not  exist",
+        message: "User does not  exist"
       });
     }
 
@@ -116,7 +114,7 @@ class UserController {
     await user.save();
 
     return res.status(200).send({
-      message: "Account Verified",
+      message: "Account Verified"
     });
   }
 
@@ -126,12 +124,12 @@ class UserController {
       return res.status(200).send({
         success: true,
         data: user
-      })
+      });
     } catch (err) {
       console.log(err);
       return res.status(400).send({
         success: false,
-        error: err.message,
+        error: err.message
       });
     }
   }
@@ -143,7 +141,7 @@ class UserController {
     if (_.isEmpty(user)) {
       return res.status(404).send({
         success: false,
-        message: "user does not exist",
+        message: "user does not exist"
       });
     }
     if (user) {
@@ -157,8 +155,8 @@ class UserController {
         name: `${user.username}`,
         intro: "Password Reset Successfully.",
         outre:
-          "If you did not initiate this reset please contact our customer support.",
-      },
+          "If you did not initiate this reset please contact our customer support."
+      }
     };
 
     const mail = mailGenerator.generate(response);
@@ -167,13 +165,13 @@ class UserController {
       from: "Across the Globe <enere0115@gmail.com>",
       to: user.email,
       subject: "Password reset success",
-      html: mail,
+      html: mail
     };
 
     await transporter.sendMail(message);
 
     return res.status(201).send({
-      message: `Password changed successfully. Confirmation email sent to  ${user.email}`,
+      message: `Password changed successfully. Confirmation email sent to  ${user.email}`
     });
   }
 }
