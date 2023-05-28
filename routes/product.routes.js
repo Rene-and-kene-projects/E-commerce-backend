@@ -1,4 +1,4 @@
-import express from "expres";
+import express from "express";
 import productController from "../controllers/product.controller.js";
 import store from "../config/multer.config.js";
 
