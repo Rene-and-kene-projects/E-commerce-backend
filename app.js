@@ -1,8 +1,7 @@
 import express from "express";
 import pino from "pino";
 import dotenv from "dotenv";
-import middleware from "./middlewares/middleware.js";
-import "express-async-errors";
+import middleware from "./middlewares/middleware.js";
 import database from "./config/db.config.js";
 
 dotenv.config();
