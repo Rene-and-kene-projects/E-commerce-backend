@@ -1,3 +1,5 @@
+import logger from "../app.js";
+
 const validator =
   (schema, reqbody = "body") =>
   async (req, res, next) => {
@@ -10,9 +12,10 @@ const validator =
       }
       next();
     } catch (e) {
+      logger.error(e)
       return res.status(500).send({
         success: false,
-        body: e
+        message: e.message
       });
     }
   };

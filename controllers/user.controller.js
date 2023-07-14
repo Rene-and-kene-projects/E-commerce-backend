@@ -12,6 +12,14 @@ class UserController {
       lastname: req.body.lastname,
       firstname: req.body.firstname
     };
+    for (const property in data) {
+      if (!data[property]) {
+        return res.status(400).send({
+          success: false,
+          message: `The ${property} field is required`
+        });
+      }
+    }
     const user = await userService.findByEmail(req.body);
     if (!_.isEmpty(user)) {
       return res.status(400).send({
@@ -170,18 +178,17 @@ class UserController {
   }
 
   async delete(req, res) {
-    try{
-     await userService.delete(req.body.id);
-    return res.status(201).send({
-      success: true,
-      message: "User deleted successfully"
-    })
-    }
-    catch(err){
+    try {
+      await userService.delete(req.body.id);
+      return res.status(201).send({
+        success: true,
+        message: "User deleted successfully"
+      });
+    } catch (err) {
       console.log(err);
       return res.status(404).send({
-      message: "deletion failed",
-      error: err.message
+        message: "deletion failed",
+        error: err.message
       });
     }
   }
