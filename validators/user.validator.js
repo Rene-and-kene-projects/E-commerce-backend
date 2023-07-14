@@ -15,7 +15,7 @@ export const validateUserSignupSchema = Joi.object().keys({
 });
 
 export const validateUserLoginSchema = Joi.object().keys({
-  email: Joi.string().required().max(15),
+  email: Joi.string().required(),
   password: Joi.string().required()
 });
 
