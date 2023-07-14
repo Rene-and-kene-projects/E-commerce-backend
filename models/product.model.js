@@ -22,6 +22,10 @@ const productSchema = mongoose.Schema({
   image: {
     type: String,
     required: true
+  },
+  admin: {
+    type: String,
+    required: true
   }
 });
 

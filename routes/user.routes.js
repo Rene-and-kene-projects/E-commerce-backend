@@ -21,4 +21,5 @@ userRouter.post(
 userRouter.get("/", userController.getUsers);
 userRouter.get("/verify/:token", userController.verify);
 userRouter.post("/forgotpassword", userController.forgotPassword);
+userRouter.delete("/delete", userController.delete);
 export default userRouter;

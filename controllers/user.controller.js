@@ -168,6 +168,23 @@ class UserController {
       message: `Password changed successfully. Confirmation email sent to  ${user.email}`
     });
   }
+
+  async delete(req, res) {
+    try{
+     await userService.delete(req.body.id);
+    return res.status(201).send({
+      success: true,
+      message: "User deleted successfully"
+    })
+    }
+    catch(err){
+      console.log(err);
+      return res.status(404).send({
+      message: "deletion failed",
+      error: err.message
+      });
+    }
+  }
 }
 
 export default new UserController();
