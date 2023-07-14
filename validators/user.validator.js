@@ -9,14 +9,13 @@ export const validateUserSignupSchema = Joi.object().keys({
     .trim()
     .lowercase()
     .required(),
-  username: Joi.string().required().max(15),
   password: Joi.string().required(),
   firstname: Joi.string().required(),
   lastname: Joi.string().required()
 });
 
 export const validateUserLoginSchema = Joi.object().keys({
-  username: Joi.string().required().max(15),
+  email: Joi.string().required().max(15),
   password: Joi.string().required()
 });
 
