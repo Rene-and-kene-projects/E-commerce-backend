@@ -2,6 +2,7 @@ import productModel from "../models/product.model.js";
 import _ from "lodash";
 import { uploadImage } from "../config/cloudinaryconfig.js";
 class ProductController {
+  
   async create(req, res) {
     if (!("file" in req)) {
       return res.status(400).send({
