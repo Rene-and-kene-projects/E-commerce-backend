@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { transporter, mailGenerator } from "../config/mailer.config.js";
 import userService from "../services/user.service.js";
+import UserModel from "../models/user.model.js";
 
 class UserController {
   async createUser(req, res) {
@@ -67,7 +68,7 @@ class UserController {
   }
 
   async loginUser(req, res) {
-    const user = await userService.findByEmail(req.body);
+    const user = await UserModel.findOne({ email: req.body.email });
     if (_.isEmpty(user)) {
       return res.status(404).send({
         success: false,
