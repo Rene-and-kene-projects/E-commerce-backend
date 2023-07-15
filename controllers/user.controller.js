@@ -7,7 +7,6 @@ import UserModel from "../models/user.model.js";
 
 class UserController {
   async createUser(req, res) {
-
     const data = {
       email: req.body.email.toLowerCase(),
       password: bcrypt.hashSync(req.body.password, 10),
@@ -68,14 +67,28 @@ class UserController {
   }
 
   async loginUser(req, res) {
-    const user = await UserModel.findOne({ email: req.body.email });
+    const data = {
+      email: req.body.email.toLowerCase(),
+      password: req.body.password
+    };
+    for (const property in data) {
+      if (!data[property]) {
+        return res.status(400).send({
+          success: false,
+          message: `The ${property} field is required`
+        });
+      }
+    }
+
+    const user = await UserModel.findOne({ email: data.email });
+
     if (_.isEmpty(user)) {
       return res.status(404).send({
         success: false,
         message: "user does not exist, create a user before attempting to login"
       });
     }
-    const verifyPassword = bcrypt.compareSync(req.body.password, user.password);
+    const verifyPassword = bcrypt.compareSync(data.password, user.password);
     if (!verifyPassword) {
       return res.status(404).send({
         success: false,
