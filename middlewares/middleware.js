@@ -10,7 +10,7 @@ const middleware = (app) => {
   app.use(express.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cors());
-  app.use(morgan("dev"));
+  app.use(morgan("combined"));
   app.use(router);
   app.use("*", (req, res) => {
     res.status(200).send("Server is Running Check API docs");
