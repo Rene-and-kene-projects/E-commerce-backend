@@ -10,6 +10,10 @@ class ProductService {
     });
     return product
   }
+  async findbyid(id) {
+    const product = await productModel.findById(id)
+    return product
+  }
 }
 
 export default new ProductService();

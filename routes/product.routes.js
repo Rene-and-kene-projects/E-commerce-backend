@@ -5,7 +5,8 @@ import authentication from "../middlewares/auth.middlewares.js";
 
 const productRouter = express.Router();
 
-productRouter.post("/create", store.single("image"), authentication,productController.create);
-productRouter.post("/find", productController.find);
+productRouter.post("/create", store.single("image"), authentication, productController.create);
+productRouter.get("/find", productController.find);
+productRouter.put("/addcolour",authentication, productController.addcolour)
 
 export default productRouter;
