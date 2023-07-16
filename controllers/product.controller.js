@@ -77,7 +77,6 @@ class ProductController {
         lowercaseData[key] = data[key];
       }
     }
-    console.log(lowercaseData);
     try {
       const product = await productService.find(
         lowercaseData.name,
