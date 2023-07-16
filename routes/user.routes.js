@@ -18,7 +18,7 @@ userRouter.post(
   [validator(validateUserLoginSchema)],
   userController.loginUser
 );
-userRouter.get("/", userController.getUsers);
+userRouter.get("/", userController.findUsers);
 userRouter.get("/verify/:token", userController.verify);
 userRouter.post("/forgotpassword", userController.forgotPassword);
 userRouter.delete("/delete", userController.delete);

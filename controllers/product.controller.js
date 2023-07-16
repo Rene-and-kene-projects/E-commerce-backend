@@ -85,6 +85,13 @@ class ProductController {
         lowercaseData.price,
         lowercaseData.size
       );
+      if (product.length < 1) {
+        return res.status(404).send({
+          success: false,
+          message: "No product with those parameters exist"
+        });
+      }
+
       return res.status(200).send({
         success: true,
         data: product

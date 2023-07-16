@@ -6,28 +6,21 @@ class UserService {
     return newUser;
   }
 
-  async findByEmail(data) {
-    const user = await userModel.findOne({ email: data.email });
-    return user;
-  }
+  async find(firstname, email, lastname) {
+    const query = {};
 
-  async findByUsername(data) {
-    const user = await userModel.findOne({ username: data.username });
-    return user;
-  }
+    if (firstname !== undefined) {
+      query.firstname = firstname;
+    }
+    if (email !== undefined) {
+      query.email = email;
+    }
+    if (lastname !== undefined) {
+      query.lastname = lastname;
+    }
 
-  async findOne(filter = {}) {
-    const user = await userModel.findOne(filter);
+    const user = await userModel.find(query);
     return user;
-  }
-
-  async find() {
-    const user = await userModel.find();
-    return user;
-  }
-  async findbyfirstname(firstname) {
-    const user = await userModel.find({ firstname: firstname });
-    return user
   }
   async delete(id) {
     const user = await userModel.findByIdAndDelete(id);

@@ -68,63 +68,63 @@ class UserController {
   }
 
   async loginUser(req, res) {
-    try{
-    const data = {
-      email: req.body.email.toLowerCase(),
-      password: req.body.password
-    };
-    for (const property in data) {
-      if (!data[property]) {
-        return res.status(400).send({
+    try {
+      const data = {
+        email: req.body.email.toLowerCase(),
+        password: req.body.password
+      };
+      for (const property in data) {
+        if (!data[property]) {
+          return res.status(400).send({
+            success: false,
+            message: `The ${property} field is required`
+          });
+        }
+      }
+
+      const user = await UserModel.findOne({ email: data.email });
+
+      if (_.isEmpty(user)) {
+        return res.status(404).send({
           success: false,
-          message: `The ${property} field is required`
+          message:
+            "user does not exist, create a user before attempting to login"
         });
       }
-    }
-
-    const user = await UserModel.findOne({ email: data.email });
-
-    if (_.isEmpty(user)) {
-      return res.status(404).send({
-        success: false,
-        message: "user does not exist, create a user before attempting to login"
-      });
-    }
-    const verifyPassword = bcrypt.compareSync(data.password, user.password);
-    if (!verifyPassword) {
-      return res.status(404).send({
-        success: false,
-        message: "email or password is invalid"
-      });
-    }
-    const token = jwt.sign(
-      {
-        _id: user._id,
-        firstname: user.firstname,
-        email: user.email,
-        lastname: user.lastname,
-        role: user.role
-      },
-      process.env.TOKEN_SECRET,
-      { expiresIn: "20h", algorithm: "HS512" }
-    );
-    return res.status(200).send({
-      success: true,
-      body: {
-        message: "user logged in successfully",
-        token,
-        data: user
+      const verifyPassword = bcrypt.compareSync(data.password, user.password);
+      if (!verifyPassword) {
+        return res.status(404).send({
+          success: false,
+          message: "email or password is invalid"
+        });
       }
-    });
+      const token = jwt.sign(
+        {
+          _id: user._id,
+          firstname: user.firstname,
+          email: user.email,
+          lastname: user.lastname,
+          role: user.role
+        },
+        process.env.TOKEN_SECRET,
+        { expiresIn: "20h", algorithm: "HS512" }
+      );
+      return res.status(200).send({
+        success: true,
+        body: {
+          message: "user logged in successfully",
+          token,
+          data: user
+        }
+      });
+    } catch (err) {
+      logger.error(err);
+      return res.status(200).send({
+        success: false,
+        error: err.message
+      });
+    }
   }
-  catch (err) {
-    logger.error(err)
-    return res.status(200).send({
-      success: false,
-      error: err.message
-    })
-  }
-}
 
   async verify(req, res) {
     const { token } = req.params;
@@ -151,15 +151,49 @@ class UserController {
     });
   }
 
-  async getUsers(req, res) {
-    try {
-      const user = await userService.find();
+  async findUsers(req, res) {
+    const data = {
+      firstname: req.query.firstname,
+      lastname: req.query.lastname,
+      email: req.query.email
+    };
+    function isEmptyObject(obj) {
+      return Object.keys(obj).length === 0;
+    }
+
+    if (isEmptyObject(req.query)) {
+      const users = await UserModel.find();
       return res.status(200).send({
         success: true,
-        data: user
+        data: users
+      });
+    }
+    let lowercaseData = {};
+    for (const key in data) {
+      if (typeof data[key] === "string") {
+        lowercaseData[key.toLowerCase()] = data[key];
+      } else {
+        lowercaseData[key] = data[key];
+      }
+    }
+    try {
+      const users = await userService.find(
+        lowercaseData.firstname,
+        lowercaseData.lastname,
+        lowercaseData.email
+      );
+      if (users.length < 1) {
+        return res.status(404).send({
+          success: false,
+          message: "No user with those parameters exist"
+        });
+      }
+      return res.status(200).send({
+        success: true,
+        data: users
       });
     } catch (err) {
-      console.log(err);
+      logger.error(err);
       return res.status(400).send({
         success: false,
         error: err.message
