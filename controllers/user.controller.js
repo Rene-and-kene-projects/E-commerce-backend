@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { transporter, mailGenerator } from "../config/mailer.config.js";
 import userService from "../services/user.service.js";
 import UserModel from "../models/user.model.js";
+import logger from "../app.js";
 
 class UserController {
   async createUser(req, res) {
@@ -67,6 +68,7 @@ class UserController {
   }
 
   async loginUser(req, res) {
+    try{
     const data = {
       email: req.body.email.toLowerCase(),
       password: req.body.password
@@ -96,7 +98,13 @@ class UserController {
       });
     }
     const token = jwt.sign(
-      { _id: user._id, username: user.username },
+      {
+        _id: user._id,
+        firstname: user.firstname,
+        email: user.email,
+        lastname: user.lastname,
+        role: user.role
+      },
       process.env.TOKEN_SECRET,
       { expiresIn: "20h", algorithm: "HS512" }
     );
@@ -109,6 +117,14 @@ class UserController {
       }
     });
   }
+  catch (err) {
+    logger.error(err)
+    return res.status(200).send({
+      success: false,
+      error: err.message
+    })
+  }
+}
 
   async verify(req, res) {
     const { token } = req.params;

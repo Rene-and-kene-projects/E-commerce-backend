@@ -19,9 +19,9 @@ class ProductController {
     }
     const result = await uploadImage(req.file.path);
     const data = {
-      name: req.body.name,
-      brand: req?.body.brand,
-      category: req?.body.category,
+      name: req.body.name.toLowerCase(),
+      brand: req?.body.brand.toLowerCase(),
+      category: req?.body.category.toLowerCase(),
       price: req.body.price,
       size: req.body.size,
       image: result.url,
