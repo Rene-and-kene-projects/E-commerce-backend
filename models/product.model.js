@@ -23,11 +23,12 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  admin: {
-    type: String,
+  admin_id: {
+    type: mongoose.Types.ObjectId,
     required: true
+
   }
-});
+},{ timestamps: true , versionKey: false});
 
 const productModel = mongoose.model("Product", productSchema);
 

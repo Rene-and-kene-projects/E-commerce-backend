@@ -31,7 +31,7 @@ const user = new mongoose.Schema(
       enum: ["admin", "user"]
     }
   },
-  { timestamps: true }
+  { timestamps: true , versionKey: false}
 );
 
 user.methods.toJSON = function l() {
@@ -41,9 +41,7 @@ user.methods.toJSON = function l() {
   return userObject;
 };
 
-// Define static method to be used on User object
 user.methods.generateToken = function t() {
-  // t is short for token
   const token = jwt.sign(
     {
       _id: this._id,

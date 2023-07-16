@@ -25,6 +25,10 @@ class UserService {
     const user = await userModel.find();
     return user;
   }
+  async findbyfirstname(firstname) {
+    const user = await userModel.find({ firstname: firstname });
+    return user
+  }
   async delete(id) {
     const user = await userModel.findByIdAndDelete(id);
     return user;
