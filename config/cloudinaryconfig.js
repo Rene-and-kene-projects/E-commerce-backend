@@ -22,7 +22,7 @@ export async function uploadImage(file) {
 
     return response;
   } catch (error) {
-    throw new Error(`From Cloudinary: ${error || error.message}`);
+   throw new Error(`From Cloudinary: ${error || error.message}`);
   }
 }
 

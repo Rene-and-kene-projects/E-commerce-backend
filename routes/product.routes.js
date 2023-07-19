@@ -8,6 +8,6 @@ const productRouter = express.Router();
 productRouter.post("/create", store.single("image"), authentication, productController.create);
 productRouter.get("/find", authentication,productController.find);
 productRouter.get("/noAuthfind", productController.find);
-productRouter.put("/addcolour",authentication, productController.addcolour)
+productRouter.put("/addcolour",authentication, productController.addcolour);
 
 export default productRouter;

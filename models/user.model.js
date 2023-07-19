@@ -36,6 +36,10 @@ const user = new mongoose.Schema(
           type: mongoose.Types.ObjectId,
           required: true,
           ref: "Product"
+        },
+        quantity: {
+          type: Number,
+          default: 1
         }
       }
     ]
@@ -60,12 +64,12 @@ user.methods.generateToken = function t() {
       role: this.role
     },
     process.env.TOKEN_SECRET,
-    { expiresIn: "20 mins" }
+    { expiresIn: "2h" }
   );
 
   return token;
 };
 
-export const UserModel = mongoose.model("User", user);
+const UserModel = mongoose.model("User", user);
 
 export default UserModel;

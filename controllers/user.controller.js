@@ -5,6 +5,7 @@ import { transporter, mailGenerator } from "../config/mailer.config.js";
 import userService from "../services/user.service.js";
 import UserModel from "../models/user.model.js";
 import logger from "../app.js";
+import ProductModel from "../models/product.model.js";
 
 class UserController {
   async createUser(req, res) {
@@ -128,7 +129,6 @@ class UserController {
 
   async verify(req, res) {
     const { token } = req.params;
-    // Check we have an id
     if (!token) {
       return res.status(422).send({
         message: "Missing Token"
@@ -243,6 +243,128 @@ class UserController {
       message: `Password changed successfully. Confirmation email sent to  ${user.email}`
     });
   }
+
+  async addToCart(req, res) {
+    try {
+      if (!req.user) {
+        return res.status(403).send({
+          success: false,
+          message: "Must be a logged in user to make this request."
+        });
+      }
+      const user = await UserModel.findById(req.user._id);
+      if (!user) {
+        return res.status(404).send({
+          success: false,
+          message: "User not found"
+        });
+      }
+
+      const data = {
+        productid: req.body.id
+      };
+      const product = await ProductModel.findOne({ _id: data.productid });
+      if (!product) {
+        return res.status(404).send({
+          success: false,
+          message: "Product not found"
+        });
+      }
+      for (const property in data) {
+        if (!data[property]) {
+          return res.status(400).send({
+            success: false,
+            message: `The ${property} is required`
+          });
+        }
+      }
+      const existingCartItem = user.cart.find(
+        (item) => item.productid.toString() === data.productid
+      );
+
+      if (existingCartItem) {
+        existingCartItem.quantity++;
+      } else {
+        user.cart.push({
+          productid: data.productid
+        });
+      }
+      await user.save();
+
+      return res.status(201).send({
+        success: true,
+        data: user
+      });
+    } catch (err) {
+      logger.error(err);
+      return res.status(400).send({
+        success: false,
+        error: err.message
+      });
+    }
+  }
+  async deleteFromCart(req, res) {
+    try {
+      if (!req.user) {
+        return res.status(403).send({
+          success: false,
+          message: "Must be a logged-in user to make this request."
+        });
+      }
+  
+      const user = await UserModel.findById(req.user._id);
+      if (!user) {
+        return res.status(404).send({
+          success: false,
+          message: "User not found"
+        });
+      }
+  
+      const productidToDelete = req.body.id;
+      if (!productidToDelete) {
+        return res.status(400).send({
+          success: false,
+          message: "The productid to delete is required"
+        });
+      }
+  
+      // Find the item to be deleted in the cart
+      const itemToDelete = user.cart.find(
+        (item) => item.productid.toString() === productidToDelete
+      );
+  
+      if (!itemToDelete) {
+        return res.status(404).send({
+          success: false,
+          message: "Product not found in the cart"
+        });
+      }
+  
+      // Check the quantity of the item
+      if (itemToDelete.quantity <= 1) {
+        // If quantity is zero, remove the item from the cart
+        user.cart = user.cart.filter(
+          (item) => item.productid.toString() !== productidToDelete
+        );
+      } else {
+        // Otherwise, decrement the quantity by one
+        itemToDelete.quantity--;
+      }
+  
+      await user.save();
+  
+      return res.status(200).send({
+        success: true,
+        data: user
+      });
+    } catch (err) {
+      logger.error(err);
+      return res.status(500).send({
+        success: false,
+        error: "Internal server error"
+      });
+    }
+  }  
 
   async delete(req, res) {
     try {
