@@ -108,7 +108,7 @@ class UserController {
           role: user.role
         },
         process.env.TOKEN_SECRET,
-        { expiresIn: "20h", algorithm: "HS512" }
+        { expiresIn: "24h", algorithm: "HS512" }
       );
       return res.status(200).send({
         success: true,
