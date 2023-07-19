@@ -52,6 +52,7 @@ class ProductController {
   }
   async find(req, res) {
     const data = {
+      id: req.query.id,
       name: req.query.name,
       category: req.query.category,
       brand: req.query.brand,
@@ -79,6 +80,7 @@ class ProductController {
     }
     try {
       const product = await productService.find(
+        lowercaseData.id,
         lowercaseData.name,
         lowercaseData.brand,
         lowercaseData.category,

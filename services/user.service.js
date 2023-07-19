@@ -6,7 +6,7 @@ class UserService {
     return newUser;
   }
 
-  async find(firstname, email, lastname) {
+  async find(id, firstname, email, lastname) {
     const query = {};
 
     if (firstname !== undefined) {
@@ -17,6 +17,9 @@ class UserService {
     }
     if (lastname !== undefined) {
       query.lastname = lastname;
+    }
+    if (id !== undefined) {
+      query._id = id;
     }
 
     const user = await userModel.find(query);

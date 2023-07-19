@@ -29,9 +29,18 @@ const user = new mongoose.Schema(
       required: true,
       default: "user",
       enum: ["admin", "user"]
-    }
+    },
+    cart: [
+      {
+        productid: {
+          type: mongoose.Types.ObjectId,
+          required: true,
+          ref: "Product"
+        }
+      }
+    ]
   },
-  { timestamps: true , versionKey: false}
+  { timestamps: true, versionKey: false }
 );
 
 user.methods.toJSON = function l() {

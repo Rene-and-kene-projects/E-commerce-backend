@@ -1,6 +1,6 @@
 import productModel from "../models/product.model.js";
 class ProductService {
-  async find(name, brand, category, price, size) {
+  async find(id, name, brand, category, price, size) {
     const query = {};
 
     if (name !== undefined) {
@@ -18,14 +18,14 @@ class ProductService {
     if (size !== undefined) {
       query.size = size;
     }
+    if (id !== undefined) {
+      query._id = id;
+    }
 
     const product = await productModel.find(query);
     return product;
   }
-  async findbyid(id) {
-    const product = await productModel.findById(id);
-    return product;
-  }
+
 }
 
 export default new ProductService();

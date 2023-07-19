@@ -32,7 +32,8 @@ const productSchema = mongoose.Schema(
     },
     admin_id: {
       type: mongoose.Types.ObjectId,
-      required: true
+      required: true,
+      ref: "User"
     }
   },
   { timestamps: true, versionKey: false }

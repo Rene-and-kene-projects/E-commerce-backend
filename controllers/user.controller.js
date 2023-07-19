@@ -155,7 +155,8 @@ class UserController {
     const data = {
       firstname: req.query.firstname,
       lastname: req.query.lastname,
-      email: req.query.email
+      email: req.query.email,
+      id: req.query.id
     };
     function isEmptyObject(obj) {
       return Object.keys(obj).length === 0;
@@ -178,6 +179,7 @@ class UserController {
     }
     try {
       const users = await userService.find(
+        lowercaseData.id,
         lowercaseData.firstname,
         lowercaseData.lastname,
         lowercaseData.email
